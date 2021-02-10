@@ -1,5 +1,6 @@
 0 * * * * /usr/local/bin/bytes_transmit.sh
 0 * * * * /usr/local/bin/bytes_receive.sh
+0 * * * * /root/ethminer-log-sweep.sh
 * * * * * /root/ethminer-nw-monitor.sh
 */2 * * * * /root/ethminer-proc-monitor.sh
 */5 * * * * /root/ethminer-stall-monitor.sh
