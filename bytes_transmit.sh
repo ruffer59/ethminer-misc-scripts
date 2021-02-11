@@ -13,7 +13,7 @@ LOG="/var/log/bytes_transmit.log"
 AT=`date '+%Y-%m-%d %H:%M:%S'`
 
 # Transmit bytes の値を切り出し
-TX=`cat /proc/net/dev | grep $NIC | sed -e 's/:/ /' | awk '{print$10}'`
+TX=`cat /proc/net/dev | grep $NIC | sed -e 's/:/ /' | awk '{print $1,$10}' | tr '\n' ' ' | sed -e "s/\$/\\n/"`
 
 # ログファイルへ出力
 echo "${AT} ${TX}" >> $LOG
