@@ -1,10 +1,17 @@
 #!/bin/sh
+LOG_FILE=`ls -t /root/ethminer-work_*.log | head -n1`
+FIELD_NUM=`tail $LOG_FILE -n 100 | grep " m " | head -n1 | awk -F "-" '{ print $2 }' | awk -F "," '{ print NF }'`
 
-if [ $(tail `ls -t /root/ethminer-work_*.log |head -n1 | awk '{print $1}'` -n 100 | awk -F "cl0 " '{ print $2 }' | grep -v '^\s*$' | grep 0.00 | head -n1) ]; then
-  # fund stall 
-  /root/ethminer-kick-screen.sh
-else
-  # No fund stall 
-  # nothing to do
-:
-fi
+while [ $FIELD_NUM -ne 0 ]
+do
+	WORD=`tail $LOG_FILE -n 100 | grep " m " | head -n1 | awk -F "-" '{ print $2 }' | awk -F "," '{ print $(expr '$FIELD_NUM') }' |awk '{ print $1 }'`
+	
+	if [ $(tail $LOG_FILE -n 100 | awk -F $WORD '{ print $2 }' | awk -F "," '{ print $1 }' | grep -v '^\s*$' | awk '{ print $1 }' | grep 0.00 | head -n1) ]; then
+		/root/ethminer-kick-screen.sh
+	else
+		:
+	fi
+
+	FIELD_NUM=`expr $FIELD_NUM - 1`
+done
+
