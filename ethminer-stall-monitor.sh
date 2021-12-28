@@ -9,6 +9,7 @@ do
 
 	if [ $FLAG ]; then
 		/root/ethminer-kick-screen.sh
+		#/sbin/reboot
 	else
 		:
 	fi
