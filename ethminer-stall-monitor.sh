@@ -1,6 +1,7 @@
 #!/bin/sh
 LOG_FILE=`ls -t /root/ethminer-work_*.log | head -n1`
 FIELD_NUM=`tail $LOG_FILE -n 100 | grep " m " | head -n1 | awk -F "-" '{ print $2 }' | awk -F "," '{ print NF }'`
+LOG_UPDATE_STATUS=`find $LOG_FILE -mmin -10 -printf "%f\n"`
 
 while [ $FIELD_NUM -ne 0 ]
 do
@@ -8,8 +9,8 @@ do
         FLAG=`tail $LOG_FILE -n 100 | awk -F $WORD '{ print $2 }' | awk -F "," '{ print $1 }' | grep -v '^\s*$' | awk '{ print $1 }' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})*)?m//g" | grep ^"0.00" | head -n1`
 
 	if [ $FLAG ]; then
-		/root/ethminer-kick-screen.sh
-		#/sbin/reboot
+		#/root/ethminer-kick-screen.sh
+		/sbin/reboot
 	else
 		:
 	fi
@@ -17,3 +18,6 @@ do
 	FIELD_NUM=`expr $FIELD_NUM - 1`
 done
 
+if [[ $LOG_UPDATE_STATUS == '' ]]; then
+	/sbin/reboot
+fi	
